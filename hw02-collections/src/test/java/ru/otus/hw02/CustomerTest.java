@@ -29,7 +29,7 @@ class CustomerTest {
     @Test
     @DisplayName("Объект Customer как ключ в карте")
     void customerAsKeyTest() {
-        //given
+        // given
         final long customerId = 1L;
         Customer customer = new Customer(customerId, "Ivan", 233);
         Map<Customer, String> map = new HashMap<>();
@@ -37,19 +37,19 @@ class CustomerTest {
         String expectedData = "data";
         map.put(customer, expectedData);
 
-        //when
+        // when
         long newScore = customer.getScores() + 10;
         String factData = map.get(new Customer(customerId, "IvanChangedName", newScore));
 
-        //then
+        // then
         assertThat(factData).isEqualTo(expectedData);
 
-        //when
+        // when
         long newScoreSecond = customer.getScores() + 20;
         customer.setScores(newScoreSecond);
         String factDataSecond = map.get(customer);
 
-        //then
+        // then
         assertThat(factDataSecond).isEqualTo(expectedData);
     }
 

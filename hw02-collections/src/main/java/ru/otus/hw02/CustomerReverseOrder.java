@@ -1,14 +1,19 @@
 package ru.otus.hw02;
 
-@SuppressWarnings({"java:S1186", "java:S1135"})
+import java.util.Iterator;
+import java.util.LinkedList;
+
 public class CustomerReverseOrder {
 
-    // todo: 2. надо реализовать методы этого класса
-    // надо подобрать подходящую структуру данных, тогда решение будет в "две строчки"
+    private final LinkedList<Customer> linkedList = new LinkedList<>();
+    private Iterator<Customer> iterator;
 
-    public void add(Customer customer) {}
+    public void add(Customer customer) {
+        linkedList.addFirst(customer);
+        iterator = linkedList.iterator();
+    }
 
     public Customer take() {
-        return null; // это "заглушка, чтобы скомилировать"
+        return iterator.next();
     }
 }
