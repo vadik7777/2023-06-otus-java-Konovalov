@@ -1,19 +1,16 @@
 package ru.otus.hw02;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Stack;
 
 public class CustomerReverseOrder {
 
-    private final LinkedList<Customer> linkedList = new LinkedList<>();
-    private Iterator<Customer> iterator;
+    private final Stack<Customer> stack = new Stack<>();
 
     public void add(Customer customer) {
-        linkedList.addFirst(customer);
-        iterator = linkedList.iterator();
+        stack.push(customer);
     }
 
     public Customer take() {
-        return iterator.next();
+        return stack.pop();
     }
 }
