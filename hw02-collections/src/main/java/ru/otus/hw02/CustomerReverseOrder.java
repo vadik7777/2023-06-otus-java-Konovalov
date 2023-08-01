@@ -2,6 +2,7 @@ package ru.otus.hw02;
 
 import java.util.Stack;
 
+@SuppressWarnings("java:S1149")
 public class CustomerReverseOrder {
 
     private final Stack<Customer> stack = new Stack<>();
