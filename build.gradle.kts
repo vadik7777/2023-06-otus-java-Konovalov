@@ -71,4 +71,12 @@ subprojects {
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:all,-serial,-processing", "-Werror"))
     }
+    tasks.withType<Test> {
+        useJUnitPlatform()
+        testLogging.showExceptions = true
+        reports {
+            junitXml.required.set(true)
+            html.required.set(true)
+        }
+    }
 }
