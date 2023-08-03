@@ -7,7 +7,7 @@ import ru.otus.hw03.annotation.After;
 import ru.otus.hw03.annotation.Before;
 import ru.otus.hw03.annotation.Test;
 
-@SuppressWarnings({"java:S106", "java:S112" /*, "java:S3776"*/})
+@SuppressWarnings({"java:S106", "java:S112"})
 public class TestHelper {
 
     private TestHelper() {}
