@@ -17,41 +17,56 @@ public class TestHelper {
         int errorCount = 0;
         var clazz = Class.forName(className);
         var declaredMethods = clazz.getDeclaredMethods();
-        var testMethods = getTestMethods(declaredMethods);
+        var testMap = initTestMap(declaredMethods);
 
-        for (Method method : testMethods) {
+        for (Method method : testMap.get(Test.class)) {
             var instance = instantiate(clazz);
-            boolean success = callMethod(instance, method);
-            if (success) {
+            var beforeMethodsSuccess =
+                    testMap.get(Before.class).stream()
+                            .map(beforeMethod -> callMethod(instance, beforeMethod))
+                            .filter(success -> !success)
+                            .findFirst()
+                            .orElse(true);
+            var testMethodSuccess = callMethod(instance, method);
+            var afterMethodsSuccess =
+                    testMap.get(After.class).stream()
+                            .map(beforeMethod -> callMethod(instance, beforeMethod))
+                            .filter(success -> !success)
+                            .findFirst()
+                            .orElse(true);
+
+            if (beforeMethodsSuccess.booleanValue()
+                    && testMethodSuccess
+                    && afterMethodsSuccess.booleanValue()) {
                 successCount++;
             } else {
                 errorCount++;
             }
         }
+
         int all = successCount + errorCount;
         printResult(className, all, successCount, errorCount);
     }
 
-    private static ArrayList<Method> getTestMethods(Method[] declaredMethods) {
-        var testMethods = new ArrayList<Method>();
+    private static Map<Class<?>, List<Method>> initTestMap(Method[] declaredMethods) {
+        Map<Class<?>, List<Method>> testMap =
+                Map.of(
+                        Before.class, new ArrayList<>(),
+                        Test.class, new ArrayList<>(),
+                        After.class, new ArrayList<>());
         for (Method method : declaredMethods) {
             var annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 if (annotation instanceof Before) {
-                    testMethods.add(0, method);
+                    testMap.get(Before.class).add(method);
                 } else if (annotation instanceof Test) {
-                    if (!testMethods.isEmpty()) {
-                        testMethods.add(1, method);
-                    } else {
-                        testMethods.add(method);
-                    }
+                    testMap.get(Test.class).add(method);
                 } else if (annotation instanceof After) {
-                    testMethods.add(method);
-                    break;
+                    testMap.get(After.class).add(method);
                 }
             }
         }
-        return testMethods;
+        return testMap;
     }
 
     private static boolean callMethod(Object instance, Method method, Object... args) {
