@@ -33,7 +33,7 @@ public class TestHelper {
             var testMethodSuccess = callMethod(instance, method);
             var afterMethodsSuccessList =
                     testMap.get(After.class).stream()
-                            .map(beforeMethod -> callMethod(instance, beforeMethod))
+                            .map(afterMethod -> callMethod(instance, afterMethod))
                             .toList();
             var afterMethodsSuccess =
                     afterMethodsSuccessList.stream()
