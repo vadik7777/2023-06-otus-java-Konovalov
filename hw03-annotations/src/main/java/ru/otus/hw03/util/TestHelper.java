@@ -21,16 +21,22 @@ public class TestHelper {
 
         for (Method method : testMap.get(Test.class)) {
             var instance = instantiate(clazz);
-            var beforeMethodsSuccess =
+            var beforeMethodsSuccessList =
                     testMap.get(Before.class).stream()
                             .map(beforeMethod -> callMethod(instance, beforeMethod))
+                            .toList();
+            var beforeMethodsSuccess =
+                    beforeMethodsSuccessList.stream()
                             .filter(success -> !success)
                             .findFirst()
                             .orElse(true);
             var testMethodSuccess = callMethod(instance, method);
-            var afterMethodsSuccess =
+            var afterMethodsSuccessList =
                     testMap.get(After.class).stream()
                             .map(beforeMethod -> callMethod(instance, beforeMethod))
+                            .toList();
+            var afterMethodsSuccess =
+                    afterMethodsSuccessList.stream()
                             .filter(success -> !success)
                             .findFirst()
                             .orElse(true);
