@@ -1,5 +1,15 @@
 package ru.otus.hw07;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import ru.otus.hw07.handler.ComplexProcessor;
+import ru.otus.hw07.listener.ListenerPrinterConsole;
+import ru.otus.hw07.model.Message;
+import ru.otus.hw07.model.ObjectForMessage;
+import ru.otus.hw07.processor.homework.ProcessorGenerateExceptionOnEvenSecond;
+import ru.otus.hw07.processor.homework.ProcessorSwapFields11AndField12;
+
+@SuppressWarnings("java:S106")
 public class HomeWork {
 
     /*
@@ -16,9 +26,26 @@ public class HomeWork {
     */
 
     public static void main(String[] args) {
-        /*
-          по аналогии с Demo.class
-          из элеменов "to do" создать new ComplexProcessor и обработать сообщение
-        */
+        var processors =
+                List.of(
+                        new ProcessorSwapFields11AndField12(),
+                        new ProcessorGenerateExceptionOnEvenSecond(
+                                () -> LocalDateTime.now().getSecond()));
+
+        var complexProcessor = new ComplexProcessor(processors, ex -> {});
+        var listenerPrinter = new ListenerPrinterConsole();
+        complexProcessor.addListener(listenerPrinter);
+
+        var message =
+                new Message.Builder(1L)
+                        .field11("field11")
+                        .field12("field12")
+                        .field13(new ObjectForMessage())
+                        .build();
+
+        var result = complexProcessor.handle(message);
+        System.out.println("result:" + result);
+
+        complexProcessor.removeListener(listenerPrinter);
     }
 }
