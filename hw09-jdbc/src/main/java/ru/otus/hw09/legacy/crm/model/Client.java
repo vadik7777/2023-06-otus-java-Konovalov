@@ -1,7 +1,9 @@
 package ru.otus.hw09.legacy.crm.model;
 
+import ru.otus.hw09.mapper.Id;
+
 public class Client {
-    private Long id;
+    @Id private Long id;
     private String name;
 
     public Client() {}

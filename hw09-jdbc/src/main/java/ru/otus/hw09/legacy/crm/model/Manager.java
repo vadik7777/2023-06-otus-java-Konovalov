@@ -1,7 +1,9 @@
 package ru.otus.hw09.legacy.crm.model;
 
+import ru.otus.hw09.mapper.Id;
+
 public class Manager {
-    private Long no;
+    @Id private Long no;
     private String label;
     private String param1;
 

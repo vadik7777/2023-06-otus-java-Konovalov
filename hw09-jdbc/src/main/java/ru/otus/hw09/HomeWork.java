@@ -11,9 +11,7 @@ import ru.otus.hw09.legacy.crm.model.Client;
 import ru.otus.hw09.legacy.crm.model.Manager;
 import ru.otus.hw09.legacy.crm.service.DbServiceClientImpl;
 import ru.otus.hw09.legacy.crm.service.DbServiceManagerImpl;
-import ru.otus.hw09.mapper.DataTemplateJdbc;
-import ru.otus.hw09.mapper.EntityClassMetaData;
-import ru.otus.hw09.mapper.EntitySQLMetaData;
+import ru.otus.hw09.mapper.*;
 
 @SuppressWarnings({"java:S125", "java:S1481"})
 public class HomeWork {
@@ -31,13 +29,15 @@ public class HomeWork {
         var dbExecutor = new DbExecutorImpl();
 
         // Работа с клиентом
-        EntityClassMetaData<Client> entityClassMetaDataClient; // = new EntityClassMetaDataImpl();
+        EntityClassMetaData<Client> entityClassMetaDataClient =
+                new EntityClassMetaDataImpl<>(Client.class);
         EntitySQLMetaData entitySQLMetaDataClient =
-                null; // = new EntitySQLMetaDataImpl(entityClassMetaDataClient);
+                new EntitySQLMetaDataImpl(entityClassMetaDataClient);
         var dataTemplateClient =
-                new DataTemplateJdbc<Client>(
+                new DataTemplateJdbc<>(
                         dbExecutor,
-                        entitySQLMetaDataClient); // реализация DataTemplate, универсальная
+                        entitySQLMetaDataClient,
+                        entityClassMetaDataClient); // реализация DataTemplate, универсальная
 
         // Код дальше должен остаться
         var dbServiceClient = new DbServiceClientImpl(transactionRunner, dataTemplateClient);
@@ -55,11 +55,13 @@ public class HomeWork {
 
         // Сделайте тоже самое с классом Manager (для него надо сделать свою таблицу)
 
-        EntityClassMetaData<Manager> entityClassMetaDataManager; // = new EntityClassMetaDataImpl();
+        EntityClassMetaData<Manager> entityClassMetaDataManager =
+                new EntityClassMetaDataImpl<>(Manager.class);
         EntitySQLMetaData entitySQLMetaDataManager =
-                null; // = new EntitySQLMetaDataImpl(entityClassMetaDataManager);
+                new EntitySQLMetaDataImpl(entityClassMetaDataManager);
         var dataTemplateManager =
-                new DataTemplateJdbc<Manager>(dbExecutor, entitySQLMetaDataManager);
+                new DataTemplateJdbc<>(
+                        dbExecutor, entitySQLMetaDataManager, entityClassMetaDataManager);
 
         var dbServiceManager = new DbServiceManagerImpl(transactionRunner, dataTemplateManager);
         dbServiceManager.saveManager(new Manager("ManagerFirst"));
