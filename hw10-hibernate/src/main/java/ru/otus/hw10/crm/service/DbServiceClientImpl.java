@@ -42,7 +42,7 @@ public class DbServiceClientImpl implements DBServiceClient {
                 session -> {
                     var clientOptional = clientDataTemplate.findById(session, id);
                     log.info("client: {}", clientOptional);
-                    return clientOptional;
+                    return clientOptional.map(Client::clone);
                 });
     }
 
@@ -52,7 +52,7 @@ public class DbServiceClientImpl implements DBServiceClient {
                 session -> {
                     var clientList = clientDataTemplate.findAll(session);
                     log.info("clientList:{}", clientList);
-                    return clientList;
+                    return clientList.stream().map(Client::clone).toList();
                 });
     }
 }

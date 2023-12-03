@@ -13,7 +13,9 @@ import ru.otus.hw10.core.repository.DataTemplateHibernate;
 import ru.otus.hw10.core.repository.HibernateUtils;
 import ru.otus.hw10.core.sessionmanager.TransactionManagerHibernate;
 import ru.otus.hw10.crm.dbmigrations.MigrationsExecutorFlyway;
+import ru.otus.hw10.crm.model.Address;
 import ru.otus.hw10.crm.model.Client;
+import ru.otus.hw10.crm.model.Phone;
 import ru.otus.hw10.crm.service.DBServiceClient;
 import ru.otus.hw10.crm.service.DbServiceClientImpl;
 
@@ -50,7 +52,9 @@ public abstract class AbstractHibernateTest {
         configuration.setProperty("hibernate.connection.username", dbUserName);
         configuration.setProperty("hibernate.connection.password", dbPassword);
 
-        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class);
+        sessionFactory =
+                HibernateUtils.buildSessionFactory(
+                        configuration, Client.class, Address.class, Phone.class);
 
         transactionManager = new TransactionManagerHibernate(sessionFactory);
         clientTemplate = new DataTemplateHibernate<>(Client.class);
