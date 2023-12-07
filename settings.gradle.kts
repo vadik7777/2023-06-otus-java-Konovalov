@@ -9,6 +9,7 @@ include("hw07-handler")
 include("hw08-serd")
 include("hw09-jdbc")
 include("hw10-hibernate")
+include("hw11-cache_engine")
 
 pluginManagement {
     val dependencyManagement: String by settings
