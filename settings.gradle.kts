@@ -8,6 +8,7 @@ include("hw06-atm")
 include("hw07-handler")
 include("hw08-serd")
 include("hw09-jdbc")
+include("hw10-hibernate")
 
 pluginManagement {
     val dependencyManagement: String by settings
