@@ -4,6 +4,7 @@ import ru.otus.hw13.appcontainer.AppComponentsContainerImpl;
 import ru.otus.hw13.appcontainer.api.AppComponentsContainer;
 import ru.otus.hw13.config.AppConfig;
 import ru.otus.hw13.services.GameProcessor;
+import ru.otus.hw13.services.GameProcessorImpl;
 
 /*
 В классе AppComponentsContainerImpl реализовать обработку, полученной в конструкторе конфигурации,
@@ -19,7 +20,7 @@ import ru.otus.hw13.services.GameProcessor;
 PS Приложение представляет собой тренажер таблицы умножения
 */
 
-@SuppressWarnings({"squid:S125", "squid:S106"})
+@SuppressWarnings({"squid:S125", "squid:S106", "java:S1481", "java:S1854"})
 public class App {
 
     public static void main(String[] args) {
@@ -35,9 +36,9 @@ public class App {
 
         // Приложение должно работать в каждом из указанных ниже вариантов
         GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
-        // GameProcessor gameProcessor = container.getAppComponent(GameProcessorImpl.class);
-        // GameProcessor gameProcessor = container.getAppComponent("gameProcessor");
+        GameProcessor gameProcessor1 = container.getAppComponent(GameProcessorImpl.class);
+        GameProcessor gameProcessor2 = container.getAppComponent("gameProcessor");
 
-        gameProcessor.startGame();
+        gameProcessor2.startGame();
     }
 }

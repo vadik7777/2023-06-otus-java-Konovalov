@@ -8,7 +8,6 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,24 +20,23 @@ import ru.otus.hw13.services.*;
 
 class AppTest {
 
-    @Disabled("Эту аннотацию надо убрать")
     @DisplayName(
             "Из контекста тремя способами должен корректно доставаться компонент с проставленными полями")
     @ParameterizedTest(name = "Достаем по: {0}")
     @CsvSource(
             value = {
-                "GameProcessor, ru.otus.services.GameProcessor",
-                "GameProcessorImpl, ru.otus.services.GameProcessor",
-                "gameProcessor, ru.otus.services.GameProcessor",
-                "IOService, ru.otus.services.IOService",
-                "IOServiceStreams, ru.otus.services.IOService",
-                "ioService, ru.otus.services.IOService",
-                "PlayerService, ru.otus.services.PlayerService",
-                "PlayerServiceImpl, ru.otus.services.PlayerService",
-                "playerService, ru.otus.services.PlayerService",
-                "EquationPreparer, ru.otus.services.EquationPreparer",
-                "EquationPreparerImpl, ru.otus.services.EquationPreparer",
-                "equationPreparer, ru.otus.services.EquationPreparer"
+                "GameProcessor, ru.otus.hw13.services.GameProcessor",
+                "GameProcessorImpl, ru.otus.hw13.services.GameProcessor",
+                "gameProcessor, ru.otus.hw13.services.GameProcessor",
+                "IOService, ru.otus.hw13.services.IOService",
+                "IOServiceStreams, ru.otus.hw13.services.IOService",
+                "ioService, ru.otus.hw13.services.IOService",
+                "PlayerService, ru.otus.hw13.services.PlayerService",
+                "PlayerServiceImpl, ru.otus.hw13.services.PlayerService",
+                "playerService, ru.otus.hw13.services.PlayerService",
+                "EquationPreparer, ru.otus.hw13.services.EquationPreparer",
+                "EquationPreparerImpl, ru.otus.hw13.services.EquationPreparer",
+                "equationPreparer, ru.otus.hw13.services.EquationPreparer"
             })
     void shouldExtractFromContextCorrectComponentWithNotNullFields(
             String classNameOrBeanId, Class<?> rootClass) throws Exception {
@@ -47,7 +45,8 @@ class AppTest {
         assertThat(classNameOrBeanId).isNotEmpty();
         Object component;
         if (classNameOrBeanId.charAt(0) == classNameOrBeanId.toUpperCase().charAt(0)) {
-            Class<?> gameProcessorClass = Class.forName("ru.otus.services." + classNameOrBeanId);
+            Class<?> gameProcessorClass =
+                    Class.forName("ru.otus.hw13.services." + classNameOrBeanId);
             assertThat(rootClass).isAssignableFrom(gameProcessorClass);
 
             component = ctx.getAppComponent(gameProcessorClass);
@@ -76,7 +75,6 @@ class AppTest {
         }
     }
 
-    @Disabled("Эту аннотацию надо убрать")
     @DisplayName("В контексте не должно быть компонентов с одинаковым именем")
     @Test
     void shouldNotAllowTwoComponentsWithSameName() {
@@ -87,7 +85,6 @@ class AppTest {
                 .isInstanceOf(Exception.class);
     }
 
-    @Disabled("Эту аннотацию надо убрать")
     @DisplayName(
             "При попытке достать из контекста отсутствующий или дублирующийся компонент, должно выкидываться исключение")
     @Test
