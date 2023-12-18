@@ -30,6 +30,8 @@ allprojects {
     }
 
     val guava: String by project
+    val jetty: String by project
+    val freemarker: String by project
     val reflections: String by project
 
 
@@ -40,6 +42,14 @@ allprojects {
                 mavenBom(BOM_COORDINATES)
             }
             dependency("com.google.guava:guava:$guava")
+            dependency("org.eclipse.jetty:jetty-servlet:$jetty")
+            dependency("org.eclipse.jetty:jetty-server:$jetty")
+            dependency("org.eclipse.jetty:jetty-webapp:$jetty")
+            dependency("org.eclipse.jetty:jetty-security:$jetty")
+            dependency("org.eclipse.jetty:jetty-http:$jetty")
+            dependency("org.eclipse.jetty:jetty-io:$jetty")
+            dependency("org.eclipse.jetty:jetty-util:$jetty")
+            dependency("org.freemarker:freemarker:$freemarker")
             dependency("org.reflections:reflections:$reflections")
         }
     }
