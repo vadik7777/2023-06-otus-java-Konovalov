@@ -1,0 +1,124 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Клиенты</title>
+    <script>
+        let i = 1
+        function postClient() {
+            // Клиент
+            let clientName = document.getElementById("client.name").value
+            if (clientName == "") {
+                clientName = null
+            }
+            // Адрес
+            let clientAddressStreet = document.getElementById("client.address.street").value
+            if (clientAddressStreet == "") {
+                clientAddressStreet = null
+            } else {
+                clientAddressStreet = {"street": clientAddressStreet}
+            }
+            // Телефоны
+            let clientPhones = []
+            for (j = 0; j < i; j++) {
+                const clientPhoneId = "client.phone[" + j + "].number"
+                let clientPhone = document.getElementById(clientPhoneId).value
+                if (clientPhone != "") {
+                    clientPhones.push({"number": clientPhone})
+                }
+            }
+            if (clientPhones.length == 0) {
+                clientPhones = null;
+            }
+            // запрос на создание
+            fetch("api/client/", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "name": clientName,
+                    "address": clientAddressStreet,
+                    "phones": clientPhones
+                })
+            }).then((response) => {
+                console.log(response)
+                location.reload()
+            });
+        }
+
+        function addPhone() {
+            const phoneContainer = document.getElementById('phoneContainer');
+            const inputPhone = document.createElement("input");
+            const divPhone = document.createElement("div");
+
+            inputPhone.id = "client.phone[" + i + "].number"
+            inputPhone.placeholder = "Номер телефона"
+            inputPhone.type = "text"
+            divPhone.append(inputPhone)
+            phoneContainer.append(divPhone)
+            i++
+        }
+    </script>
+</head>
+
+<body>
+<h4>Создать клиента</h4>
+<div>
+    <input type="text" id="client.name" value="" placeholder="Имя">
+</div>
+<div>
+    <input type="text" id="client.address.street" value="" placeholder="Улица">
+</div>
+<div>
+    <div id="phoneContainer">
+        <div>
+            <input type="text" id="client.phone[0].number" value="" placeholder="Номер телефона">
+        </div>
+    </div>
+    <button onclick="addPhone()">Добавить номер</button>
+</div>
+
+<button onclick="postClient()">Создать</button>
+
+<h4>Список клиентов</h4>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td {
+        height: 20px;
+    }
+</style>
+<table style="width: 400px; border-color: black;">
+    <thead>
+    <tr>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 150px">Улица</td>
+        <td style="width: 100px">Телефоны</td>
+    </tr>
+    </thead>
+    <tbody id="clients-body">
+    <#list clients as client>
+        <tr>
+            <#if client.name??>
+                <td>${client.name}</td>
+            <#else>
+                <td></td>
+            </#if>
+            <#if client.address??>
+                <td>${client.address.street}</td>
+            <#else>
+                <td></td>
+            </#if>
+            <#if client.phones??>
+                <#list client.phones as phone>
+                    <td style="width: 100px">${phone.number}</td>
+                </#list>
+            </#if>
+        </tr>
+    </#list>
+</tbody>
+</table>
+</body>
+</html>
