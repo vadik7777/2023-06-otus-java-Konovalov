@@ -12,6 +12,7 @@ include("hw10-hibernate")
 include("hw11-cache_engine")
 include("hw12-web_server")
 include("hw13-di")
+include("hw14-jdbc")
 
 pluginManagement {
     val dependencyManagement: String by settings
