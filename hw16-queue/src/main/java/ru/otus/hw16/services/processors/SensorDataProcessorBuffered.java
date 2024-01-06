@@ -1,5 +1,8 @@
 package ru.otus.hw16.services.processors;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.hw16.api.SensorDataProcessor;
@@ -13,24 +16,39 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
 
     private final int bufferSize;
     private final SensorDataBufferedWriter writer;
+    private final ConcurrentSkipListSet<SensorData> concurrentSkipListSet;
+    private final List<SensorData> bufferedData;
 
     public SensorDataProcessorBuffered(int bufferSize, SensorDataBufferedWriter writer) {
         this.bufferSize = bufferSize;
         this.writer = writer;
+        this.bufferedData = new ArrayList<>();
+        this.concurrentSkipListSet =
+                new ConcurrentSkipListSet<>(
+                        (d1, d2) ->
+                                d1.getMeasurementTime().isAfter(d2.getMeasurementTime()) ? 1 : -1);
     }
 
     @Override
     public void process(SensorData data) {
-        /*
-            if (dataBuffer.size() >= bufferSize) {
-                flush();
-            }
-        */
+        if (concurrentSkipListSet.size() >= bufferSize) {
+            flush();
+        }
+        concurrentSkipListSet.add(data);
     }
 
-    public void flush() {
+    public synchronized void flush() {
         try {
-            // writer.writeBufferedData(bufferedData);
+            while (!concurrentSkipListSet.isEmpty()) {
+                var sensorData = concurrentSkipListSet.pollFirst();
+                if (sensorData != null) {
+                    bufferedData.add(sensorData);
+                }
+            }
+            if (!bufferedData.isEmpty()) {
+                writer.writeBufferedData(bufferedData.stream().map(SensorData::clone).toList());
+                bufferedData.clear();
+            }
         } catch (Exception e) {
             log.error("Ошибка в процессе записи буфера", e);
         }

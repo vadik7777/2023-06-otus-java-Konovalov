@@ -1,11 +1,19 @@
 package ru.otus.hw16.api.model;
 
 import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
 
-public class SensorData {
+@EqualsAndHashCode
+public class SensorData implements Cloneable {
     private final LocalDateTime measurementTime;
     private final String room;
     private final Double value;
+
+    @SuppressWarnings({"java:S2975", "java:S1182"})
+    @Override
+    public SensorData clone() {
+        return new SensorData(this.measurementTime, this.room, this.value);
+    }
 
     public SensorData(LocalDateTime measurementTime, String room, Double value) {
         this.measurementTime = measurementTime;
