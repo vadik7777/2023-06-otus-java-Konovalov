@@ -14,6 +14,7 @@ include("hw12-web_server")
 include("hw13-di")
 include("hw14-jdbc")
 include("hw15-sequence_of_numbers")
+include("hw16-queue")
 
 pluginManagement {
     val dependencyManagement: String by settings
