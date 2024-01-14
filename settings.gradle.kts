@@ -14,6 +14,7 @@ include("hw12-web_server")
 include("hw13-di")
 include("hw14-jdbc")
 include("hw15-sequence_of_numbers")
+include("hw17-grpc")
 
 pluginManagement {
     val dependencyManagement: String by settings
@@ -21,6 +22,7 @@ pluginManagement {
     val johnrengelmanShadow: String by settings
     val sonarlint: String by settings
     val spotless: String by settings
+    val protobufVer: String by settings
 
 
     plugins {
@@ -29,5 +31,6 @@ pluginManagement {
         id("com.github.johnrengelman.shadow") version johnrengelmanShadow
         id("name.remal.sonarlint") version sonarlint
         id("com.diffplug.spotless") version spotless
+        id("com.google.protobuf") version protobufVer
     }
 }
