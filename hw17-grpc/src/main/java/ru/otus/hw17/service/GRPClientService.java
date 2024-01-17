@@ -5,6 +5,7 @@ import io.grpc.stub.StreamObserver;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.hw17.NewValueMessage;
@@ -21,7 +22,7 @@ public class GRPClientService {
     private static final int FIST_VALUE_CYCLE = 0;
     private static final int LAST_VALUE_CYCLE = 50;
 
-    private volatile int newValue;
+    private final AtomicInteger newValue = new AtomicInteger();
     private int currentValue;
     private int oldValue;
 
@@ -38,9 +39,7 @@ public class GRPClientService {
                 new StreamObserver<>() {
                     @Override
                     public void onNext(NewValueMessage newValueMessage) {
-                        synchronized (this) {
-                            newValue = newValueMessage.getNewValue();
-                        }
+                        newValue.getAndSet(newValueMessage.getNewValue());
                         logger.info("New value: {}", newValue);
                     }
 
@@ -61,13 +60,12 @@ public class GRPClientService {
                     int repeatCount = LAST_VALUE_CYCLE - FIST_VALUE_CYCLE;
 
                     public void run() {
-                        synchronized (this) {
-                            if (newValue != oldValue) {
-                                oldValue = newValue;
-                                currentValue = currentValue + newValue + 1;
-                            } else {
-                                currentValue++;
-                            }
+                        var value = newValue.get();
+                        if (value != oldValue) {
+                            oldValue = value;
+                            currentValue = currentValue + value + 1;
+                        } else {
+                            currentValue++;
                         }
                         logger.info("Current value: {}", currentValue);
                         if (needStop()) {
