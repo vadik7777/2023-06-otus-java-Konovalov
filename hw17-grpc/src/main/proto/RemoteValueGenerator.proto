@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ru.otus.hw17;
+
+option java_multiple_files = true;
+
+message NewValueMessage {
+    int32 newValue=1;
+}
+
+message StartGenerate {
+    int32 firstValue=2;
+    int32 lastValue=3;
+}
+message Empty {}
+
+service RemoteValueGenerator {
+    rpc generateValue(StartGenerate) returns (stream NewValueMessage);
+}
