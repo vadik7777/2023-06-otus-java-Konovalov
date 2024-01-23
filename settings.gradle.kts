@@ -16,6 +16,8 @@ include("hw14-jdbc")
 include("hw15-sequence_of_numbers")
 include("hw16-queue")
 include("hw17-grpc")
+include("hw18-reactive:client-service")
+include("hw18-reactive:datastore-service")
 
 pluginManagement {
     val dependencyManagement: String by settings
