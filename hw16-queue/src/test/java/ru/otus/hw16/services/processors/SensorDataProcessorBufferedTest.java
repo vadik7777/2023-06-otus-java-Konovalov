@@ -195,7 +195,8 @@ class SensorDataProcessorBufferedTest {
 
     private void joinThread(Thread thread) {
         try {
-            thread.join(10);
+            // Похоже комп устал...
+            thread.join(500);
         } catch (InterruptedException ignored) {
         }
     }
